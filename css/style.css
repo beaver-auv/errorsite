@@ -1,0 +1,63 @@
+.mt-4 {
+  font-weight: 750;
+}
+
+/* General Styling */
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #f0f4f7, #ffffff);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 20px;
+  letter-spacing: 1.5px;
+}
+
+#canvas {
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Camera Section */
+.camera-section {
+  max-width: 640px;
+  margin-right: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  position: relative;
+}
+
+/* Buttons */
+button {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+  background-color: #007bff;
+  color: #fff;
+}
+
+button:hover {
+  background-color: #0056b3;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .camera-section {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
