@@ -22,7 +22,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3 (Graphs) -->
   </head>
 
-  <body style="margin-bottom: 16px">
+  <body class="space">
     <div class="container">
       <h1 class="mt-4 text-center">AUV Debugging</h1>
 
@@ -32,16 +32,16 @@
           <h2 class="text-center">General Info</h2>
           <div id="textDisplayGen">
             <h3>Status:</h3>
-            <h6 id="statusUpdate" style="margin-bottom: 16px">Neutral</h6>
+            <h6 id="statusUpdate" class="space">Neutral</h6>
 
             <h3>Current Depth:</h3>
-            <h6 id="depthDisplay" style="margin-bottom: 16px">0.00 ft</h6>
+            <h6 id="depthDisplay" class="space">0.00 ft</h6>
 
             <h3>Sub Acceleration:</h3>
-            <h6 id="accelIMU" style="margin-bottom: 16px">0.00 m/s</h6>
+            <h6 id="accelIMU" class="space">0.00 m/s</h6>
 
             <h3>Sub Rotation:</h3>
-            <h6 id="rotIMU" style="margin-bottom: 16px">0.00 deg</h6>
+            <h6 id="rotIMU" class="space">0.00 deg</h6>
           </div>
         </div>
 
@@ -50,18 +50,23 @@
           <h2>Camera Output</h2>
           <canvas 
           id="cameraDisplay" 
-          width="440" 
-          height="320" 
-          style="border: 2px solid black; border-radius: 50px"
+          class="camera-section"
           ></canvas>
+          <button id="testButton" class="btn btn-info mt-3">Test Button</button>
         </div>
       </div>
 
       <h2>Motor Data</h2>
-      <canvas id="motorGraph"></canvas>
+      <canvas id="motorGraph" 
+      class="space"></canvas>
 
       <h2>PID Data</h2>
-      <canvas id="chartPID"></canvas>
+      <canvas id="chartPID" class="space"></canvas>
+
+      <h2>Console</h2>
+      <div id="outputConsole" 
+      class="scrollable-textbox">test text</div>
+
     </div>
 
     <!-- Chart and graph setup -->

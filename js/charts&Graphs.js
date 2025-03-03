@@ -1,10 +1,13 @@
 const motorGraph = document.getElementById("motorGraph");
 const chartPID = document.getElementById("chartPID");
 let timestamp = 0;
+let repetitions = 1;
 let AUVactive = true;
 // Pull from same place as desiredPID (just for setup)
 let initialDesired = 20;
 let lastDesired = 20;
+// Pull from same place as current PID (just for setup)
+let initialPID = 0;
 
 let PID = new Chart(chartPID, {
   type: "line",
@@ -63,12 +66,13 @@ setInterval(function() {
     PID.data.datasets[1].data.shift();
     PID.data.datasets[1].data.push(desiredPID);
   } else if (desiredPID != lastDesired) {
-    for (let i = 0; i <= PID.data.datasets[1].data.length; i++) {
+    for (let i = 0; i <= repetitions; i++) {
       PID.data.datasets[1].data[i] = desiredPID;
     };
   };
 
   lastDesired = desiredPID;
+  repetitions += 1;
 
   PID.update("none");
 }, 500); // Executed every 500 miliseconds
