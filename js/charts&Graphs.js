@@ -1,15 +1,17 @@
 const motorGraph = document.getElementById("motorGraph");
 const chartPID = document.getElementById("chartPID")
-var AUVactive = true
+let timestamp = 0
+let AUVactive = true
 
-PID = new Chart(chartPID, {
-  type: "bar",
+let PID = new Chart(chartPID, {
+  type: "line",
   data: {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    labels: ["0"], //["-3", "-2.5", "-2", "-1.5", "-1", "-0.5", "0"], // Limited display data
     datasets: [{
       label: "PID Level",
-      data: [12, 19, 3, 5, 2, 3],
-      borderWidth: 1
+      data: [0],
+      borderWidth: 1,
+      tension: 0.4
     }]
   },
   options: {
@@ -22,15 +24,21 @@ PID = new Chart(chartPID, {
           text: "Desired PID"
         },
         grid: {
-          color: 'rgb(217, 24, 24)'
+          color: 'rgba(0, 0, 0, 0.1)'
         }
       }
     }
   }
 });
 
-/*while (AUVactive){
-  PID.data = [12, 19, 3, 5, 2, 3]
+
+setInterval(function() {
+  //Fetch currentPID from other data
+  let currentPID = 0
+  PID.data.datasets[0].data.push(currentPID);
+
+  timestamp -= 0.5
+  PID.data.labels.unshift(String(timestamp))
 
   PID.update()
-}*/
+}, 500); // Executed every 500 miliseconds
