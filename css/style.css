@@ -20,20 +20,13 @@ h1 {
 }
 
 .space {
-  margin-bottom: 16px
+  margin-bottom: 16px;
 }
 
 #canvas {
   border: none;
   border-radius: 8px;
   width: 100%;
-}
-
-.camera-section {
-  width: 440px; 
-  height: 320px; 
-  border: 2px solid black; 
-  border-radius: 50px;
 }
 
 /* Buttons */
@@ -54,6 +47,15 @@ button:hover {
   transform: scale(1.05);
 }
 
+/* One time sections */
+.camera-section {
+  width: 440px; 
+  height: 320px; 
+  border: 2px solid black; 
+  border-radius: 50px;
+  margin-bottom: 16px;
+}
+
 .scrollable-textbox {
   height: 100px;
   overflow: scroll;
@@ -61,5 +63,12 @@ button:hover {
   color: white;
   font-family: sans-serif;
   padding: 10px;
-  margin-bottom: 16px
+  margin-bottom: 16px;
+}
+
+.motor-section {
+  width: 500px;
+  height: 500px;
+  border: 1px solid black; 
+  margin-bottom: 16px;
 }

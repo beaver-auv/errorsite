@@ -37,11 +37,7 @@
             <h3>Current Depth:</h3>
             <h6 id="depthDisplay" class="space">0.00 ft</h6>
 
-            <h3>Sub Acceleration:</h3>
-            <h6 id="accelIMU" class="space">0.00 m/s</h6>
-
-            <h3>Sub Rotation:</h3>
-            <h6 id="rotIMU" class="space">0.00 deg</h6>
+            <button id="testButton" class="btn btn-info mt-3">Test Button</button>
           </div>
         </div>
 
@@ -52,16 +48,17 @@
           id="cameraDisplay" 
           class="camera-section"
           ></canvas>
-          <button id="testButton" class="btn btn-info mt-3">Test Button</button>
         </div>
       </div>
 
+      <!-- Visualizations Section -->
       <h2>Motor Data</h2>
-      <canvas id="motorGraph" 
-      class="space"></canvas>
+      <svg id="motorVisualization" 
+      class="motor-section"></svg>
 
       <h2>PID Data</h2>
-      <canvas id="chartPID" class="space"></canvas>
+      <canvas id="chartPID" 
+      class="space"></canvas>
 
       <h2>Console</h2>
       <div id="outputConsole" 
@@ -69,8 +66,8 @@
 
     </div>
 
-    <!-- Chart and graph setup -->
-    <script src="js/charts&Graphs.js"></script>
+    <!-- Visualizations Setup -->
+    <script src="js/visualizations.js"></script>
 
     
   </body>
