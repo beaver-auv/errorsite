@@ -1,5 +1,6 @@
 const motorGraph = document.getElementById("motorGraph");
 const chartPID = document.getElementById("chartPID");
+const motorCount = document.getElementById("aM")
 let timestamp = 0;
 let repetitions = 1;
 
@@ -81,13 +82,48 @@ setInterval(function() {
 document.addEventListener("DOMContentLoaded", function() {
   const svg = d3.select("#motorVisualization");
 
+  // Fetch the number of motors from the rest of the code later
+  let numMotors = 6
+
+  let motors = []
+
   // Example motor data. Fetch the actual data from the rest of code later
-  const motors = [
-    { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
-    { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
-    { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
-    { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 }
-  ];
+  if (numMotors == 8) {
+    motorCount.textContent = "Active Motors: 8"
+    motors = [
+      { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
+      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
+      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
+      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 },
+      { id: 5, x: 140, y: 140, acceleration: { x: 20, y: -5 }, rotation: 60 },
+      { id: 6, x: 260, y: 140, acceleration: { x: 15, y: 0 }, rotation: 10 },
+      { id: 7, x: 140, y: 260, acceleration: { x: 0, y: 25 }, rotation: -70 },
+      { id: 8, x: 260, y: 260, acceleration: { x: 0, y: 0 }, rotation: 50 }
+    ];
+  } else if (numMotors == 6) {
+    motorCount.textContent = "Active Motors: 6"
+    motors = [
+      { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
+      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
+      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
+      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 },
+      { id: 5, x: 200, y: 125, acceleration: { x: 20, y: -5 }, rotation: 60 },
+      { id: 6, x: 200, y: 275, acceleration: { x: 15, y: 0 }, rotation: 10 }
+    ];
+  } else if (numMotors == 4) {
+    motorCount.textContent = "Active Motors: 4"
+    motors = [
+      { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
+      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
+      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
+      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 }
+    ];
+  } else {
+    motorCount.textContent = "Active Motors: Error"
+    motors = [
+      { id: 1, x: 200, y: 200, acceleration: { x: 0, y: 0 }, rotation: 0 }
+    ];
+  };
 
   // Define an arrow marker to draw acceleration vectors.
   const defs = svg.append("defs");
