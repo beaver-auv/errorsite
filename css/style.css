@@ -23,6 +23,14 @@ h1 {
   margin-bottom: 16px;
 }
 
+.ex-space {
+  margin-bottom: 32px;
+}
+
+.sp-space-1 {
+  margin-top: 48px;
+}
+
 #canvas {
   border: none;
   border-radius: 8px;
@@ -57,7 +65,7 @@ button:hover {
 }
 
 .scrollable-textbox {
-  height: 100px;
+  height: 300px;
   overflow: scroll;
   background-color: rgb(77, 77, 77);
   color: white;

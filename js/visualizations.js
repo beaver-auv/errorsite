@@ -13,9 +13,6 @@ let lastDesired = 20;
 // Pull from same place as current PID (just for setup)
 let initialPID = 0;
 
-// Fetch the number of motors from the rest of the code later
-let numMotors = 8;
-
 /* PID Chart Setup */
 let PID = new Chart(chartPID, {
   type: "line",
@@ -89,91 +86,90 @@ setInterval(function() {
 setInterval(function() {
   const svg = d3.select("#motorVisualization");
 
+  // Fetch the number of motors from the rest of the code later
+  let numMotors = 8;
+
   let motors = [];
+
+  // Fetch acceleration values from rest of code later
+  motorAccelerations = [0, 0, 0, 0, 0, 0]
+  if (numMotors == 8) {
+    // Add more if necesarry
+    motorAccelerations.push(0, 0)
+  }
+
+  // Convert accleration values into acceptable data to make into arrows
+  /* Convert here */
 
   // Presets for the motor layouts based on motor count
   if (numMotors == 8) {
     motorCount.textContent = "Active Motors: 8";
     motors = [
       { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
-      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
-      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
-      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 },
-      { id: 5, x: 140, y: 140, acceleration: { x: 20, y: -5 }, rotation: 60 },
-      { id: 6, x: 260, y: 140, acceleration: { x: -15, y: 0 }, rotation: 10 },
-      { id: 7, x: 140, y: 260, acceleration: { x: 0, y: 25 }, rotation: -70 },
-      { id: 8, x: 260, y: 260, acceleration: { x: 0, y: 0 }, rotation: 50 }
+      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: 45 },
+      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 45 },
+      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 45 },
+      { id: 5, x: 140, y: 140, acceleration: { x: 20, y: -5 }, rotation: 0 },
+      { id: 6, x: 260, y: 140, acceleration: { x: -15, y: 0 }, rotation: 0 },
+      { id: 7, x: 140, y: 260, acceleration: { x: 0, y: 25 }, rotation: 0 },
+      { id: 8, x: 260, y: 260, acceleration: { x: 0, y: 0 }, rotation: 0 }
     ];
 
     motorData1.innerHTML = `
-    <h3>Motor 1</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${45}°</h5>
+    <h3 class="sp-space-1">Motor 1</h3>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[0]} m/s</h5>
 
     <h3>Motor 2</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${-30}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[1]} m/s</h5>
 
     <h3>Motor 3</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${90}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[2]} m/s</h5>
 
     <h3>Motor 4</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${0}°</h5>`
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[3]} m/s</h5>`
 
     motorData2.innerHTML = `
-    <h3>Motor 5</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${60}°</h5>
+    <h3 class="sp-space-1">Motor 5</h3>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[4]} m/s</h5>
 
     <h3>Motor 6</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${10}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[5]} m/s</h5>
 
     <h3>Motor 7</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${-70}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[6]} m/s</h5>
 
     <h3>Motor 8</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${50}°</h5>`
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[7]} m/s</h5>`
   } else if (numMotors == 6) {
     motorCount.textContent = "Active Motors: 6";
     motors = [
       { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
-      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: -30 },
-      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 90 },
-      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 0 },
-      { id: 5, x: 200, y: 125, acceleration: { x: 20, y: -5 }, rotation: 60 },
-      { id: 6, x: 200, y: 275, acceleration: { x: 15, y: 0 }, rotation: 10 }
+      { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: 45 },
+      { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 45 },
+      { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 45 },
+      { id: 5, x: 200, y: 125, acceleration: { x: 20, y: -5 }, rotation: 0 },
+      { id: 6, x: 200, y: 275, acceleration: { x: 15, y: 0 }, rotation: 0 }
     ];
 
     motorData1.innerHTML = `
-    <h3>Motor 1</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${45}°</h5>
+    <h3 class="sp-space-1">Motor 1</h3>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[0]} m/s</h5>
 
     <h3>Motor 2</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${-30}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[1]} m/s</h5>
 
     <h3>Motor 3</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${90}°</h5>`
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[2]} m/s</h5>`
 
     motorData2.innerHTML = `
-    <h3>Motor 4</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${0}°</h5>
+    <h3 class="sp-space-1">Motor 4</h3>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[3]} m/s</h5>
 
     <h3>Motor 5</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${60}°</h5>
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[4]} m/s</h5>
 
     <h3>Motor 6</h3>
-    <h5>Acceleration:</h5>
-    <h5 class="space">Rotation: ${10}°</h5>`
+    <h5 class="ex-space">Acceleration: ${motorAccelerations[5]} m/s</h5>`
   } else {
     motorCount.textContent = "Active Motors: Error";
     motors = [
@@ -223,6 +219,7 @@ setInterval(function() {
                                    .attr("class", "motor")
                                    .attr("transform", d => `translate(${d.x}, ${d.y})`);
   
+  // Draw a square for each motor (rotated by the motor's rotation)
   const squareSize = 30;
   motorEnter.append("rect")
             .attr("x", -squareSize / 2)
@@ -233,6 +230,7 @@ setInterval(function() {
             .attr("stroke", "#000")
             .attr("transform", d => `rotate(${d.rotation})`);
 
+  // Draw an arrow representing the acceleration vector
   motorEnter.append("line")
             .attr("x1", 0)
             .attr("y1", 0)
@@ -242,6 +240,7 @@ setInterval(function() {
             .attr("stroke-width", 2)
             .attr("marker-end", "url(#arrow)");
 
+  // Add a text label with the motor ID below each square
   motorEnter.append("text")
             .attr("x", 0)
             .attr("y", squareSize / 2 + 15)
@@ -251,6 +250,4 @@ setInterval(function() {
             .text(d => `Motor ${d.id}`);
 }, 500);
 
-testButton.addEventListener("click", () => {
-  numMotors = 6
-});
+testButton.addEventListener("click", () => {}); // For testing
