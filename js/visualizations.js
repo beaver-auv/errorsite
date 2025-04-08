@@ -1,3 +1,4 @@
+/* Handles the motor and PID charts */
 const chartPID = document.getElementById("chartPID");
 const motorCount = document.getElementById("aM");
 const testButton = document.getElementById("testingButton")
@@ -116,30 +117,30 @@ setInterval(function() {
     ];
 
     motorData1.innerHTML = `
-    <h3 class="sp-space-1">Motor 1</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[0]} m/s</h5>
+    <h3 class="topspace2">Motor 1</h3>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[0]} m/s</h5>
 
     <h3>Motor 2</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[1]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[1]} m/s</h5>
 
     <h3>Motor 3</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[2]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[2]} m/s</h5>
 
     <h3>Motor 4</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[3]} m/s</h5>`
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[3]} m/s</h5>`
 
     motorData2.innerHTML = `
-    <h3 class="sp-space-1">Motor 5</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[4]} m/s</h5>
+    <h3 class="topspace2">Motor 5</h3>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[4]} m/s</h5>
 
     <h3>Motor 6</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[5]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[5]} m/s</h5>
 
     <h3>Motor 7</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[6]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[6]} m/s</h5>
 
     <h3>Motor 8</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[7]} m/s</h5>`
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[7]} m/s</h5>`
   } else if (numMotors == 6) {
     motorCount.textContent = "Active Motors: 6";
     motors = [
@@ -152,24 +153,24 @@ setInterval(function() {
     ];
 
     motorData1.innerHTML = `
-    <h3 class="sp-space-1">Motor 1</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[0]} m/s</h5>
+    <h3 class="topspace2">Motor 1</h3>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[0]} m/s</h5>
 
     <h3>Motor 2</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[1]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[1]} m/s</h5>
 
     <h3>Motor 3</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[2]} m/s</h5>`
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[2]} m/s</h5>`
 
     motorData2.innerHTML = `
-    <h3 class="sp-space-1">Motor 4</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[3]} m/s</h5>
+    <h3 class="topspace2">Motor 4</h3>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[3]} m/s</h5>
 
     <h3>Motor 5</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[4]} m/s</h5>
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[4]} m/s</h5>
 
     <h3>Motor 6</h3>
-    <h5 class="ex-space">Acceleration: ${motorAccelerations[5]} m/s</h5>`
+    <h5 class="downspace2">Acceleration: ${motorAccelerations[5]} m/s</h5>`
   } else {
     motorCount.textContent = "Active Motors: Error";
     motors = [

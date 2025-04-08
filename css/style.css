@@ -19,22 +19,42 @@ h1 {
   font-weight: 750;
 }
 
-.space {
+.downspace {
   margin-bottom: 16px;
 }
 
-.ex-space {
+.downspace2 {
   margin-bottom: 32px;
 }
 
-.sp-space-1 {
+.rightspace {
+  margin-right: 16px;
+}
+
+.topspace {
+  margin-top: 16px;
+}
+
+.topspace2 {
   margin-top: 48px;
+}
+
+.leftspace {
+  margin-left: 16px;
 }
 
 #canvas {
   border: none;
   border-radius: 8px;
   width: 100%;
+}
+
+.center-parent {
+  text-align: center;
+}
+
+.center-child {
+  display: inline-block;
 }
 
 /* Buttons */

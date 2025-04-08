@@ -1,0 +1,1 @@
+/* Handles the view from the onboard camera */

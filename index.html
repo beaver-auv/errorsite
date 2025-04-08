@@ -22,9 +22,24 @@
     <script src="https://d3js.org/d3.v7.min.js"></script> <!-- D3 (Graphs) -->
   </head>
 
-  <body class="space">
+  <body class="downspace">
     <div class="container">
       <h1 class="mt-4 text-center">AUV Debugging</h1>
+      <div class="center-parent">
+        <button 
+        id="loadButton" 
+        class="btn btn-warning mt-3 
+        center-child rightspace
+        disabled"
+        >Load Run</button>
+
+        <button 
+        id="saveButton" 
+        class="btn btn-primary mt-3 
+        center-child 
+        disabled"
+        >Save Run</button>
+      </div>
 
       <div class="row">
         <!-- General Info Section -->
@@ -32,13 +47,13 @@
           <h2 class="text-center">General Info</h2>
           <div id="textDisplayGen">
             <h3>Status:</h3>
-            <h6 id="statusUpdate" class="space">Neutral</h6>
+            <h6 id="statusUpdate" class="downspace">Neutral</h6>
 
             <h3>Current Depth:</h3>
-            <h6 id="depthDisplay" class="space">0.00 ft</h6>
+            <h6 id="depthDisplay" class="downspace">0.00 ft</h6>
 
             <h3>Sub Rotation:</h3>
-            <h6 id="rotationDisplay" class="space">0.00°</h6>
+            <h6 id="rotationDisplay" class="downspace">0.00°</h6>
 
             <button id="testingButton" class="btn btn-info mt-3">Test Button</button>
           </div>
@@ -72,7 +87,7 @@
       </div>
       <h2>PID Data</h2>
       <canvas id="chartPID" 
-      class="space"></canvas>
+      class="downspace"></canvas>
 
       <h2>Console</h2>
       <div id="outputConsole" 
@@ -83,6 +98,11 @@
     <!-- Visualizations Setup -->
     <script src="js/visualizations.js"></script>
 
+    <!-- Camera Setup -->
+    <script src="js/camera.js"></script>
+
+    <!-- Run From File Setup -->
+     <script src="js/runLoader.js"></script>
     
   </body>
 </html>
