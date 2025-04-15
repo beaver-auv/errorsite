@@ -30,14 +30,14 @@
         id="loadButton" 
         class="btn btn-warning mt-3 
         center-child rightspace
-        disabled"
+        disabled" style="cursor: not-allowed"
         >Load Run</button>
 
         <button 
         id="saveButton" 
         class="btn btn-primary mt-3 
         center-child 
-        disabled"
+        disabled" style="cursor: not-allowed"
         >Save Run</button>
       </div>
 
@@ -91,7 +91,7 @@
 
       <h2>Console</h2>
       <div id="outputConsole" 
-      class="scrollable-textbox">test text</div>
+      class="scrollable-textbox"></div> <!-- <br> creates a new line -->
 
     </div>
 
@@ -103,6 +103,9 @@
 
     <!-- Run From File Setup -->
      <script src="js/runLoader.js"></script>
-    
+
+    <!-- Console Output -->
+    <script src="js/console.js"></script>
+
   </body>
 </html>
