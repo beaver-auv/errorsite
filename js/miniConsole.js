@@ -1,5 +1,5 @@
 /* Handles the text being outputted into the console */
-const console = document.getElementById("outputConsole")
+const miniConsole = document.getElementById("outputConsole")
 let first = true
 
 setInterval(function() {
@@ -7,9 +7,9 @@ setInterval(function() {
     newinfo = "pulled data"
 
     if (first) {
-        console.innerHTML += `${newinfo}`
+        miniConsole.innerHTML += `${newinfo}`
         first = false 
     } else {
-        console.innerHTML += `<br> ${newinfo}`
+        miniConsole.innerHTML += `<br> ${newinfo}`
     }
   }, 500); // Executed every 500 miliseconds
