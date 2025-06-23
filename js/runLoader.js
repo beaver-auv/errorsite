@@ -48,7 +48,6 @@ saveButton.addEventListener("click", () => {
 loadButton.addEventListener("click", () => {
   fileInput.value = "";
   fileInput.click();
-  showPopup();
 });
 
 fileInput.addEventListener("change", (event) => {
@@ -67,12 +66,16 @@ fileInput.addEventListener("change", (event) => {
       }));
       // Reset chart for fresh playback
       isLive = false;
+      showPopup();
       resetPIDChart();
       pauseChartPID();
       pauseChartM();
       startReplay();
     } catch (err) {
       console.error("Error parsing replay file:", err);
+      if (newInfo == "") {
+        newInfo = `Error parsing replay file: ${err}`
+      };
     }
   };
   reader.readAsText(file);
