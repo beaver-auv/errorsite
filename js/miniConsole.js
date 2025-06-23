@@ -1,15 +1,17 @@
 /* Handles the text being outputted into the console */
 const miniConsole = document.getElementById("outputConsole")
-let first = true
+let firstLine = true
 
-setInterval(function() {
-    // Pull info from other code later
-    newinfo = "pulled data"
+function startMiniConsole() {
+    conUpdate = setInterval(function() {
+        // Pull info from other code later
+        newinfo = "pulled data"
 
-    if (first) {
-        miniConsole.innerHTML += `${newinfo}`
-        first = false 
-    } else {
-        miniConsole.innerHTML += `<br> ${newinfo}`
-    }
-  }, 500); // Executed every 500 miliseconds
+        if (firstLine) {
+            miniConsole.innerHTML += `${newinfo}`
+            firstLine = false 
+        } else {
+            miniConsole.innerHTML += `<br> ${newinfo}`
+        }
+    }, 500); // Executed every 500 miliseconds
+};
