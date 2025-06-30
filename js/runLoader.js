@@ -72,10 +72,7 @@ fileInput.addEventListener("change", (event) => {
       pauseChartM();
       startReplay();
     } catch (err) {
-      console.error("Error parsing replay file:", err);
-      if (newInfo == "") {
-        newInfo = `Error parsing replay file: ${err}`
-      };
+      errorHandler(`Error parsing replay file: ${err}`)
     }
   };
   reader.readAsText(file);

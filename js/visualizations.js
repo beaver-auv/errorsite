@@ -23,7 +23,16 @@ let pidStorage = {
   desired: [initialDesired]
 };
 
-let motorStorage = {};
+let motorStorage = {
+  motorOne: [],
+  motorTwo: [],
+  motorThree: [],
+  motorFour: [],
+  motorFive: [],
+  motorSix: [],
+  motorSeven: [],
+  motorEight: []
+};
 
 /* PID Chart Setup */
 let PID = new Chart(chartPID, {
@@ -129,90 +138,145 @@ function startChartM() {
     let motors = [];
 
     // Fetch acceleration values from rest of code later
-    motorAccelerations = [0, 0, 0, 0, 0, 0]
     if (numMotors == 8) {
-      // Add more if necesarry
-      motorAccelerations.push(0, 0);
+      accelList = {
+        horiMotors: [-100, -100, 100, 100],
+        vertMotors: [-100, 100, 100, -100]
+      };
+    } else if (numMotors == 6) {
+      accelList = {
+        horiMotors: [-100, -100, 100, 100],
+        vertMotors: [-100, 100]
+      };
     };
 
     // Convert accleration values into acceptable data to make into arrows
-    /* Convert here */
+    function calculateVectH(speed, angle, dir) {
+      // Scale speed to pixel range
+      const magnitude = (speed / 100) * 40;
+
+      const angle45 = Math.SQRT1_2;
+
+      if (angle === "+") {
+        if (dir === "n") {
+          return {
+            x: magnitude * angle45,
+            y: -magnitude * angle45
+          };
+          
+        } else if (dir === "s") {
+          return {
+            x: magnitude * -angle45,
+            y: -magnitude * -angle45
+          };
+        } else {
+          errorHandler("Error creating motor display")
+        };
+
+      } else if (angle === "-") {
+        if (dir === "n") {
+          return {
+            x: magnitude * -angle45,
+            y: -magnitude * angle45
+          };
+          
+        } else if (dir === "s") {
+          return {
+            x: magnitude * angle45,
+            y: -magnitude * -angle45
+          };
+        } else {
+          errorHandler("Error creating motor display")
+        };
+
+      } else {
+        errorHandler("Error creating motor display")
+      };
+    };
+
+    function calculateVectV(speed) {
+      return {
+        x: 0,
+        y: -(speed / 100) * 40
+      };
+    }
+
 
     // Presets for the motor layouts based on motor count
     if (numMotors == 8) {
       motorCount.textContent = "Active Motors: 8";
       motors = [
-        { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
-        { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: 45 },
-        { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 45 },
-        { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 45 },
-        { id: 5, x: 140, y: 140, acceleration: { x: 20, y: -5 }, rotation: 0 },
-        { id: 6, x: 260, y: 140, acceleration: { x: -15, y: 0 }, rotation: 0 },
-        { id: 7, x: 140, y: 260, acceleration: { x: 0, y: 25 }, rotation: 0 },
-        { id: 8, x: 260, y: 260, acceleration: { x: 0, y: 0 }, rotation: 0 }
+        { id: 1, x: 100, y: 100, acceleration: calculateVectH(accelList.horiMotors[0], "-", "n"), rotation: 45 },
+        { id: 2, x: 300, y: 100, acceleration: calculateVectH(accelList.horiMotors[1], "+", "n"), rotation: 45 },
+        { id: 3, x: 100, y: 300, acceleration: calculateVectH(accelList.horiMotors[2], "+", "s"), rotation: 45 },
+        { id: 4, x: 300, y: 300, acceleration: calculateVectH(accelList.horiMotors[3], "-", "s"), rotation: 45 },
+        { id: 5, x: 140, y: 140, acceleration: calculateVectV(accelList.vertMotors[0]), rotation: 0 },
+        { id: 6, x: 260, y: 140, acceleration: calculateVectV(accelList.vertMotors[1]), rotation: 0 },
+        { id: 7, x: 140, y: 260, acceleration: calculateVectV(accelList.vertMotors[2]), rotation: 0 },
+        { id: 8, x: 260, y: 260, acceleration: calculateVectV(accelList.vertMotors[3]), rotation: 0 }
       ];
 
       motorData1.innerHTML = `
       <h3 class="topspace2">Motor 1</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[0]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[0]}%</h5>
 
       <h3>Motor 2</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[1]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[1]}%</h5>
 
       <h3>Motor 3</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[2]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[2]}%</h5>
 
       <h3>Motor 4</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[3]} m/s</h5>`
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[3]}%</h5>`
 
       motorData2.innerHTML = `
       <h3 class="topspace2">Motor 5</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[4]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[0]}%</h5>
 
       <h3>Motor 6</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[5]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[1]}%</h5>
 
       <h3>Motor 7</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[6]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[2]}%</h5>
 
       <h3>Motor 8</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[7]} m/s</h5>`
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[3]}%</h5>`
     } else if (numMotors == 6) {
       motorCount.textContent = "Active Motors: 6";
       motors = [
-        { id: 1, x: 100, y: 100, acceleration: { x: 30, y: -20 }, rotation: 45 },
-        { id: 2, x: 300, y: 100, acceleration: { x: -25, y: 15 }, rotation: 45 },
-        { id: 3, x: 100, y: 300, acceleration: { x: 10, y: 25 }, rotation: 45 },
-        { id: 4, x: 300, y: 300, acceleration: { x: 0, y: 0 }, rotation: 45 },
-        { id: 5, x: 200, y: 125, acceleration: { x: 20, y: -5 }, rotation: 0 },
-        { id: 6, x: 200, y: 275, acceleration: { x: 15, y: 0 }, rotation: 0 }
+        { id: 1, x: 100, y: 100, acceleration: calculateVectH(accelList.horiMotors[0], "-", "n"), rotation: 45 },
+        { id: 2, x: 300, y: 100, acceleration: calculateVectH(accelList.horiMotors[1], "+", "n"), rotation: 45 },
+        { id: 3, x: 100, y: 300, acceleration: calculateVectH(accelList.horiMotors[2], "+", "s"), rotation: 45 },
+        { id: 4, x: 300, y: 300, acceleration: calculateVectH(accelList.horiMotors[3], "-", "s"), rotation: 45 },
+        { id: 5, x: 200, y: 125, acceleration: calculateVectV(accelList.vertMotors[0]), rotation: 0 },
+        { id: 6, x: 200, y: 275, acceleration: calculateVectV(accelList.vertMotors[1]), rotation: 0 }
       ];
 
       motorData1.innerHTML = `
       <h3 class="topspace2">Motor 1</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[0]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[0]}%</h5>
 
       <h3>Motor 2</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[1]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[1]}%</h5>
 
       <h3>Motor 3</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[2]} m/s</h5>`
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[2]}%</h5>`
 
       motorData2.innerHTML = `
       <h3 class="topspace2">Motor 4</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[3]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[3]}%</h5>
 
       <h3>Motor 5</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[4]} m/s</h5>
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[0]}%</h5>
 
       <h3>Motor 6</h3>
-      <h5 class="downspace2">Acceleration: ${motorAccelerations[5]} m/s</h5>`
+      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[1]}%</h5>`
     } else {
       motorCount.textContent = "Active Motors: Error";
       motors = [
         { id: 1, x: 200, y: 200, acceleration: { x: 0, y: 0 }, rotation: 0 }
       ];
-    }
+    };
 
     // Define an arrow marker to draw acceleration vectors
     if (svg.select("defs").empty()) {
