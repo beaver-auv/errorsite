@@ -26,18 +26,19 @@ function hidePopup() {
 
 // Save current run's data
 saveButton.addEventListener("click", () => {
-  const pidData = {
+  const auvData = {
     labels: PID.data.labels,
     actual: PID.data.datasets[0].data,
-    desired: PID.data.datasets[1].data
+    desired: PID.data.datasets[1].data,
+    motor: motorStorage
   };
 
-  let blob = new Blob([JSON.stringify(pidData, null, 2)], { type: "application/json" });
+  let blob = new Blob([JSON.stringify(auvData, null, 2)], { type: "application/json" });
   let url = URL.createObjectURL(blob);
 
   let a = document.createElement("a");
   a.href = url;
-  a.download = "pid_data_run.json";
+  a.download = "auv_data_run.json";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -58,13 +59,25 @@ fileInput.addEventListener("change", (event) => {
   reader.onload = function(e) {
     try {
       let loaded = JSON.parse(e.target.result);
-      // Build frame array: [{timestamp, pid, desired}, ...]
+
+      // Build frame array: [{timestamp, pid, desired, motor}, ...]
       replayData = loaded.labels.map((lbl, i) => ({
         timestamp: lbl,
         pid: loaded.actual[i],
-        desired: loaded.desired[i]
+        desired: loaded.desired[i],
+        motor: {
+          motorOne: loaded.motor?.motorOne?.[i] ?? 0,
+          motorTwo: loaded.motor?.motorTwo?.[i] ?? 0,
+          motorThree: loaded.motor?.motorThree?.[i] ?? 0,
+          motorFour: loaded.motor?.motorFour?.[i] ?? 0,
+          motorFive: loaded.motor?.motorFive?.[i] ?? 0,
+          motorSix: loaded.motor?.motorSix?.[i] ?? 0,
+          motorSeven: loaded.motor?.motorSeven?.[i] ?? 0,
+          motorEight: loaded.motor?.motorEight?.[i] ?? 0
+        }
       }));
-      // Reset chart for fresh playback
+
+      // Reset charts for fresh playback
       isLive = false;
       showPopup();
       resetPIDChart();
@@ -119,6 +132,24 @@ function replayStep() {
   
   PID.data.datasets[1].data.push(frame.desired);
   PID.update("none");
+
+  // Update motor chart
+  accelList = {
+    horiMotors: [
+      frame.motor.motorOne,
+      frame.motor.motorTwo,
+      frame.motor.motorThree,
+      frame.motor.motorFour
+    ],
+    vertMotors: [
+      frame.motor.motorFive,
+      frame.motor.motorSix,
+      frame.motor.motorSeven,
+      frame.motor.motorEight
+    ]
+  };
+
+  updateMotorChart(accelList.horiMotors, accelList.vertMotors);
 
   replayIndex++;
 }

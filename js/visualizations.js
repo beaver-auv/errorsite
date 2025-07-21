@@ -17,6 +17,9 @@ let lastDesired = 20;
 let initialPID = 0;
 let lastPID = 0;
 
+// Fetch the number of motors from the rest of the code later
+let numMotors = 8;
+
 let pidStorage = {
   labels: ["0"],
   actual: [initialPID],
@@ -123,6 +126,57 @@ function startChartPID() {
   }, 500); // Executed every 500 miliseconds
 };
 
+// Converts the motor accleration values into acceptable data to create arrows
+function calculateVectH(speed, angle, dir) {
+  // Scale speed to pixel range
+  const magnitude = (speed / 100) * 40;
+
+  const angle45 = Math.SQRT1_2;
+
+  if (angle === "+") {
+    if (dir === "n") {
+      return {
+        x: magnitude * angle45,
+        y: -magnitude * angle45
+      };
+      
+    } else if (dir === "s") {
+      return {
+        x: magnitude * -angle45,
+        y: -magnitude * -angle45
+      };
+    } else {
+      errorHandler("Error creating motor display")
+    };
+
+  } else if (angle === "-") {
+    if (dir === "n") {
+      return {
+        x: magnitude * -angle45,
+        y: -magnitude * angle45
+      };
+      
+    } else if (dir === "s") {
+      return {
+        x: magnitude * angle45,
+        y: -magnitude * -angle45
+      };
+    } else {
+      errorHandler("Error creating motor display")
+    };
+
+  } else {
+    errorHandler("Error creating motor display")
+  };
+};
+
+function calculateVectV(speed) {
+  return {
+    x: 0,
+    y: -(speed / 100) * 40
+  };
+};
+
 /* Motor Visualization Loop */
 function startChartM() {
   loopMotor = setInterval(function() {
@@ -130,226 +184,199 @@ function startChartM() {
       // To be added to
       isPausedMotor = false;
     };
-    const svg = d3.select("#motorVisualization");
 
-    // Fetch the number of motors from the rest of the code later
-    let numMotors = 8;
-
-    let motors = [];
-
-    // Fetch acceleration values from rest of code later
+    // Fetch non-temp acceleration values from rest of code later
     if (numMotors == 8) {
       accelList = {
         horiMotors: [-100, -100, 100, 100],
         vertMotors: [-100, 100, 100, -100]
       };
+
+      // Store motor data
+      motorStorage.motorOne.push(accelList.horiMotors[0]);
+      motorStorage.motorTwo.push(accelList.horiMotors[1]);
+      motorStorage.motorThree.push(accelList.horiMotors[2]);
+      motorStorage.motorFour.push(accelList.horiMotors[3]);
+
+      motorStorage.motorFive.push(accelList.vertMotors[0]);
+      motorStorage.motorSix.push(accelList.vertMotors[1]);
+      motorStorage.motorSeven.push(accelList.vertMotors[2]);
+      motorStorage.motorEight.push(accelList.vertMotors[3]);
+
     } else if (numMotors == 6) {
       accelList = {
         horiMotors: [-100, -100, 100, 100],
         vertMotors: [-100, 100]
       };
+
+      // Store motor data
+      motorStorage.motorOne.push(accelList.horiMotors[0]);
+      motorStorage.motorTwo.push(accelList.horiMotors[1]);
+      motorStorage.motorThree.push(accelList.horiMotors[2]);
+      motorStorage.motorFour.push(accelList.horiMotors[3]);
+
+      motorStorage.motorFive.push(accelList.vertMotors[0]);
+      motorStorage.motorSix.push(accelList.vertMotors[1]);
+      motorStorage.motorSeven.push(accelList.vertMotors[2]);
+      motorStorage.motorEight.push(accelList.vertMotors[3]);
     };
 
-    // Convert accleration values into acceptable data to make into arrows
-    function calculateVectH(speed, angle, dir) {
-      // Scale speed to pixel range
-      const magnitude = (speed / 100) * 40;
+    updateMotorChart(accelList.horiMotors, accelList.vertMotors);
 
-      const angle45 = Math.SQRT1_2;
-
-      if (angle === "+") {
-        if (dir === "n") {
-          return {
-            x: magnitude * angle45,
-            y: -magnitude * angle45
-          };
-          
-        } else if (dir === "s") {
-          return {
-            x: magnitude * -angle45,
-            y: -magnitude * -angle45
-          };
-        } else {
-          errorHandler("Error creating motor display")
-        };
-
-      } else if (angle === "-") {
-        if (dir === "n") {
-          return {
-            x: magnitude * -angle45,
-            y: -magnitude * angle45
-          };
-          
-        } else if (dir === "s") {
-          return {
-            x: magnitude * angle45,
-            y: -magnitude * -angle45
-          };
-        } else {
-          errorHandler("Error creating motor display")
-        };
-
-      } else {
-        errorHandler("Error creating motor display")
-      };
-    };
-
-    function calculateVectV(speed) {
-      return {
-        x: 0,
-        y: -(speed / 100) * 40
-      };
-    }
-
-
-    // Presets for the motor layouts based on motor count
-    if (numMotors == 8) {
-      motorCount.textContent = "Active Motors: 8";
-      motors = [
-        { id: 1, x: 100, y: 100, acceleration: calculateVectH(accelList.horiMotors[0], "-", "n"), rotation: 45 },
-        { id: 2, x: 300, y: 100, acceleration: calculateVectH(accelList.horiMotors[1], "+", "n"), rotation: 45 },
-        { id: 3, x: 100, y: 300, acceleration: calculateVectH(accelList.horiMotors[2], "+", "s"), rotation: 45 },
-        { id: 4, x: 300, y: 300, acceleration: calculateVectH(accelList.horiMotors[3], "-", "s"), rotation: 45 },
-        { id: 5, x: 140, y: 140, acceleration: calculateVectV(accelList.vertMotors[0]), rotation: 0 },
-        { id: 6, x: 260, y: 140, acceleration: calculateVectV(accelList.vertMotors[1]), rotation: 0 },
-        { id: 7, x: 140, y: 260, acceleration: calculateVectV(accelList.vertMotors[2]), rotation: 0 },
-        { id: 8, x: 260, y: 260, acceleration: calculateVectV(accelList.vertMotors[3]), rotation: 0 }
-      ];
-
-      motorData1.innerHTML = `
-      <h3 class="topspace2">Motor 1</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[0]}%</h5>
-
-      <h3>Motor 2</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[1]}%</h5>
-
-      <h3>Motor 3</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[2]}%</h5>
-
-      <h3>Motor 4</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[3]}%</h5>`
-
-      motorData2.innerHTML = `
-      <h3 class="topspace2">Motor 5</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[0]}%</h5>
-
-      <h3>Motor 6</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[1]}%</h5>
-
-      <h3>Motor 7</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[2]}%</h5>
-
-      <h3>Motor 8</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[3]}%</h5>`
-    } else if (numMotors == 6) {
-      motorCount.textContent = "Active Motors: 6";
-      motors = [
-        { id: 1, x: 100, y: 100, acceleration: calculateVectH(accelList.horiMotors[0], "-", "n"), rotation: 45 },
-        { id: 2, x: 300, y: 100, acceleration: calculateVectH(accelList.horiMotors[1], "+", "n"), rotation: 45 },
-        { id: 3, x: 100, y: 300, acceleration: calculateVectH(accelList.horiMotors[2], "+", "s"), rotation: 45 },
-        { id: 4, x: 300, y: 300, acceleration: calculateVectH(accelList.horiMotors[3], "-", "s"), rotation: 45 },
-        { id: 5, x: 200, y: 125, acceleration: calculateVectV(accelList.vertMotors[0]), rotation: 0 },
-        { id: 6, x: 200, y: 275, acceleration: calculateVectV(accelList.vertMotors[1]), rotation: 0 }
-      ];
-
-      motorData1.innerHTML = `
-      <h3 class="topspace2">Motor 1</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[0]}%</h5>
-
-      <h3>Motor 2</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[1]}%</h5>
-
-      <h3>Motor 3</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[2]}%</h5>`
-
-      motorData2.innerHTML = `
-      <h3 class="topspace2">Motor 4</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.horiMotors[3]}%</h5>
-
-      <h3>Motor 5</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[0]}%</h5>
-
-      <h3>Motor 6</h3>
-      <h5 class="downspace2">Acceleration: ${accelList.vertMotors[1]}%</h5>`
-    } else {
-      motorCount.textContent = "Active Motors: Error";
-      motors = [
-        { id: 1, x: 200, y: 200, acceleration: { x: 0, y: 0 }, rotation: 0 }
-      ];
-    };
-
-    // Define an arrow marker to draw acceleration vectors
-    if (svg.select("defs").empty()) {
-      const defs = svg.append("defs");
-      defs.append("marker")
-        .attr("id", "arrow")
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 5)
-        .attr("refY", 0)
-        .attr("markerWidth", 4)
-        .attr("markerHeight", 4)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5")
-        .attr("fill", "#000");
-    }
-
-    // Update groups and remove unnecessary ones
-    const motorSelection = svg.selectAll("g.motor")
-                              .data(motors, d => d.id);
-    motorSelection.exit().remove();
-
-    // Update existing groups
-    motorSelection
-      .attr("transform", d => `translate(${d.x}, ${d.y})`)
-      .select("rect")
-      .attr("transform", d => `rotate(${d.rotation})`);
-
-    motorSelection
-      .select("line")
-      .attr("x2", d => d.acceleration.x)
-      .attr("y2", d => d.acceleration.y);
-
-    motorSelection
-      .select("text")
-      .text(d => `Motor ${d.id}`);
-
-    // Create groups for new data
-    const motorEnter = motorSelection.enter()
-                                    .append("g")
-                                    .attr("class", "motor")
-                                    .attr("transform", d => `translate(${d.x}, ${d.y})`);
-    
-    // Draw a square for each motor (rotated by the motor's rotation)
-    const squareSize = 30;
-    motorEnter.append("rect")
-              .attr("x", -squareSize / 2)
-              .attr("y", -squareSize / 2)
-              .attr("width", squareSize)
-              .attr("height", squareSize)
-              .attr("fill", "#ccc")
-              .attr("stroke", "#000")
-              .attr("transform", d => `rotate(${d.rotation})`);
-
-    // Draw an arrow representing the acceleration vector
-    motorEnter.append("line")
-              .attr("x1", 0)
-              .attr("y1", 0)
-              .attr("x2", d => d.acceleration.x)
-              .attr("y2", d => d.acceleration.y)
-              .attr("stroke", "red")
-              .attr("stroke-width", 2)
-              .attr("marker-end", "url(#arrow)");
-
-    // Add a text label with the motor ID below each square
-    motorEnter.append("text")
-              .attr("x", 0)
-              .attr("y", squareSize / 2 + 15)
-              .attr("text-anchor", "middle")
-              .attr("font-size", "12px")
-              .attr("fill", "#333")
-              .text(d => `Motor ${d.id}`);
   }, 500);
+};
+
+function updateMotorChart(horiMotors, vertMotors) {
+  const svg = d3.select("#motorVisualization");
+  let motors = [];
+
+  // Presets for the motor layouts based on motor count
+  if (numMotors == 8) {
+    motorCount.textContent = "Active Motors: 8";
+    motors = [
+      { id: 1, x: 100, y: 100, acceleration: calculateVectH(horiMotors[0], "-", "n"), rotation: 45 },
+      { id: 2, x: 300, y: 100, acceleration: calculateVectH(horiMotors[1], "+", "n"), rotation: 45 },
+      { id: 3, x: 100, y: 300, acceleration: calculateVectH(horiMotors[2], "+", "s"), rotation: 45 },
+      { id: 4, x: 300, y: 300, acceleration: calculateVectH(horiMotors[3], "-", "s"), rotation: 45 },
+      { id: 5, x: 140, y: 140, acceleration: calculateVectV(vertMotors[0]), rotation: 0 },
+      { id: 6, x: 260, y: 140, acceleration: calculateVectV(vertMotors[1]), rotation: 0 },
+      { id: 7, x: 140, y: 260, acceleration: calculateVectV(vertMotors[2]), rotation: 0 },
+      { id: 8, x: 260, y: 260, acceleration: calculateVectV(vertMotors[3]), rotation: 0 }
+    ];
+
+    motorData1.innerHTML = `
+    <h3 class="topspace2">Motor 1</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[0]}%</h5>
+
+    <h3>Motor 2</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[1]}%</h5>
+
+    <h3>Motor 3</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[2]}%</h5>
+
+    <h3>Motor 4</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[3]}%</h5>`
+
+    motorData2.innerHTML = `
+    <h3 class="topspace2">Motor 5</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[0]}%</h5>
+
+    <h3>Motor 6</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[1]}%</h5>
+
+    <h3>Motor 7</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[2]}%</h5>
+
+    <h3>Motor 8</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[3]}%</h5>`
+  } else if (numMotors == 6) {
+    motorCount.textContent = "Active Motors: 6";
+    motors = [
+      { id: 1, x: 100, y: 100, acceleration: calculateVectH(horiMotors[0], "-", "n"), rotation: 45 },
+      { id: 2, x: 300, y: 100, acceleration: calculateVectH(horiMotors[1], "+", "n"), rotation: 45 },
+      { id: 3, x: 100, y: 300, acceleration: calculateVectH(horiMotors[2], "+", "s"), rotation: 45 },
+      { id: 4, x: 300, y: 300, acceleration: calculateVectH(horiMotors[3], "-", "s"), rotation: 45 },
+      { id: 5, x: 200, y: 125, acceleration: calculateVectV(vertMotors[0]), rotation: 0 },
+      { id: 6, x: 200, y: 275, acceleration: calculateVectV(vertMotors[1]), rotation: 0 }
+    ];
+
+    motorData1.innerHTML = `
+    <h3 class="topspace2">Motor 1</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[0]}%</h5>
+
+    <h3>Motor 2</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[1]}%</h5>
+
+    <h3>Motor 3</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[2]}%</h5>`
+
+    motorData2.innerHTML = `
+    <h3 class="topspace2">Motor 4</h3>
+    <h5 class="downspace2">Acceleration: ${horiMotors[3]}%</h5>
+
+    <h3>Motor 5</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[0]}%</h5>
+
+    <h3>Motor 6</h3>
+    <h5 class="downspace2">Acceleration: ${vertMotors[1]}%</h5>`
+  } else {
+    motorCount.textContent = "Active Motors: Error";
+    motors = [
+      { id: 1, x: 200, y: 200, acceleration: { x: 0, y: 0 }, rotation: 0 }
+    ];
+  };
+
+  // Define an arrow marker to draw acceleration vectors
+  if (svg.select("defs").empty()) {
+    const defs = svg.append("defs");
+    defs.append("marker")
+      .attr("id", "arrow")
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 5)
+      .attr("refY", 0)
+      .attr("markerWidth", 4)
+      .attr("markerHeight", 4)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#000");
+  }
+
+  // Update groups and remove unnecessary ones
+  const motorSelection = svg.selectAll("g.motor")
+                            .data(motors, d => d.id);
+  motorSelection.exit().remove();
+
+  // Update existing groups
+  motorSelection
+    .attr("transform", d => `translate(${d.x}, ${d.y})`)
+    .select("rect")
+    .attr("transform", d => `rotate(${d.rotation})`);
+
+  motorSelection
+    .select("line")
+    .attr("x2", d => d.acceleration.x)
+    .attr("y2", d => d.acceleration.y);
+
+  motorSelection
+    .select("text")
+    .text(d => `Motor ${d.id}`);
+
+  // Create groups for new data
+  const motorEnter = motorSelection.enter()
+                                  .append("g")
+                                  .attr("class", "motor")
+                                  .attr("transform", d => `translate(${d.x}, ${d.y})`);
+  
+  // Draw a square for each motor (rotated by the motor's rotation)
+  const squareSize = 30;
+  motorEnter.append("rect")
+            .attr("x", -squareSize / 2)
+            .attr("y", -squareSize / 2)
+            .attr("width", squareSize)
+            .attr("height", squareSize)
+            .attr("fill", "#ccc")
+            .attr("stroke", "#000")
+            .attr("transform", d => `rotate(${d.rotation})`);
+
+  // Draw an arrow representing the acceleration vector
+  motorEnter.append("line")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", d => d.acceleration.x)
+            .attr("y2", d => d.acceleration.y)
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("marker-end", "url(#arrow)");
+
+  // Add a text label with the motor ID below each square
+  motorEnter.append("text")
+            .attr("x", 0)
+            .attr("y", squareSize / 2 + 15)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("fill", "#333")
+            .text(d => `Motor ${d.id}`);
 };
 
 function pauseChartPID() {
@@ -364,4 +391,4 @@ function pauseChartM() {
 startChartPID();
 startChartM();
 
-testButton.addEventListener("click", () => {}); // For testing
+testButton.addEventListener("click", () => {}); // For testing only
